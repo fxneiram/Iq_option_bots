@@ -1,4 +1,4 @@
-import streamlit as st
+#import streamlit as st
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -26,19 +26,19 @@ class TradingBot(ABC):
 
     def stop_check(self):
         if self.lucro <= float("-" + str(abs(self.stop_loss))):
-            print("Stop Loss batido!")
+            print("Tope de pérdida alcanzado!")
             sys.exit()
 
         if self.lucro >= float(abs(self.stop_gain)):
-            print("Stop Gain Batido!")
+            print("Tope de ganancia alcanzado")
             sys.exit()
 
     def get_profit(self, valor):
         valor = valor if valor > 0 else float("-" + str(abs(self.entry_value)))
         self.lucro += round(valor, 2)
 
-        st.info(f"WIN:{round(valor, 2)}" if valor > 0 else f"LOSS:{round(valor, 2)}")
-        st.info(f"Lucro Líquido:{round(self.lucro, 2)}")
+        print(f"WIN:{round(valor, 2)}" if valor > 0 else f"LOSS:{round(valor, 2)}")
+        print(f"Lucro Líquido:{round(self.lucro, 2)}")
         self.stop_check()
 
     def wait_complete(self, order_id):
@@ -51,23 +51,23 @@ class TradingBot(ABC):
 
     def run(self):
 
-        st.info(
-            f"Iniciando sessão.\nPar: {self.pair} \nStop Loss: {self.stop_loss} \nStop Gain: {self.stop_gain}"
+        print(
+            f"Iniciando sesión.\nPar: {self.pair} \nDetener al perder: {self.stop_loss} \nDetener al ganar: {self.stop_gain}"
         )
-        st.info(f"Par: {self.pair}")
-        st.info(f"Stop Loss: {self.stop_loss}")
-        st.info(f"Stop Gain: {self.stop_gain}")
+        print(f"Par: {self.pair}")
+        print(f"Detener al perder: {self.stop_loss}")
+        print(f"Detener al ganar: {self.stop_gain}")
 
         while True:
 
             df = self.exchange.candles_to_df(pair=self.pair)
-            st.line_chart(df["close"])
+            print(df["close"])
             last_datetime = timestamp_converter(df["from"].iloc[-1])
             tempo_servidor = timestamp_converter(
                 self.exchange.api.get_server_timestamp()
             )
 
-            st.info(f"Último candle: {last_datetime}, Servidor: {tempo_servidor}")
+            print(f"Última vela: {last_datetime}, Servidor: {tempo_servidor}")
 
             valor_entrada = float(int(self.exchange.api.get_balance()) // 100)
 
@@ -77,10 +77,10 @@ class TradingBot(ABC):
             )
 
             if status:
-                st.info(f"Entrou: {entry_sign}, Valor:{self.entry_value}")
+                print(f"Llegó en: {entry_sign}, Valor:{self.entry_value}")
                 self.wait_complete(order_id)
             else:
-                st.info("\nERRO AO REALIZAR ORDEM\n\n")
+                print("\nERRO AO REALIZAR ORDEM\n\n")
 
 
 def timestamp_converter(x):

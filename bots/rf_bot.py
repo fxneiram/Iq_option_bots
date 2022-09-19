@@ -1,4 +1,4 @@
-import streamlit as st
+#import streamlit as st
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
@@ -51,7 +51,7 @@ class RandomForestBot(TradingBot):
     def rf_metrics(model, y_test, y_pred, x_cols):
         accuracy = accuracy_score(y_test, y_pred, normalize=True) * 100.0
 
-        st.info(f"Assertividade (%): {accuracy}")
+        print(f"Assertividade (%): {accuracy}")
 
         feature_imp = pd.Series(
             model.feature_importances_, index=x_cols.columns
@@ -74,8 +74,8 @@ class RandomForestBot(TradingBot):
 
         next = rand_frst_clf.predict_proba(today)[0]
 
-        st.info(
-            f"Assertividade (%): {accuracy} Previsão (%): Baixa :{next[0]}, Alta :{next[1]}"
+        print(
+            f"Confianza (%): {accuracy} Previsión (%): \nBaixa :{next[0]}, \nAlta :{next[1]}\n\n"
         )
 
         return "put" if next[0] > next[1] else "call"

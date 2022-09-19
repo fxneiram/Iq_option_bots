@@ -25,7 +25,7 @@ def core():  # sourcery skip: extract-method
         with st.sidebar.form("Login"):
             st.session_state.username = st.text_input("Username")
             st.session_state.password = st.text_input("Password", type="password")
-            st.session_state.account_type = st.selectbox("Select balance type", ["PRACTICE"])
+            st.session_state.account_type = st.selectbox("Select balance type", ["", "PRACTICE"])
             st.session_state.exchange_name = st.selectbox("Select Exchange", ["IQ Option"])
 
             if st.form_submit_button("Login"):
@@ -36,6 +36,7 @@ def core():  # sourcery skip: extract-method
                         password=st.session_state.password,
                         account_type=st.session_state.account_type,
                     )
+                    print(st.session_state.exchange)
                 else:
                     raise NoExchangeException()
                 st.session_state.logged = True

@@ -11,7 +11,8 @@ class IQOptionExchange(Exchange):
     def api(self) -> IQ_Option:
         api = IQ_Option(self.username, self.password)
         api.connect()
-        api.change_balance("PRACTICE")
+        if self.account_type != "PRACTICE":
+            api.change_balance(self.account_type)
         return api
 
     def retry(self):
